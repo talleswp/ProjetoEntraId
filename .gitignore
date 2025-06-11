@@ -9,3 +9,5 @@ dist/
 
 # Sistema
 .DS_Store
+.ps1
+
