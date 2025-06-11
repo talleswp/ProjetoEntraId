@@ -366,4 +366,4 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 
 ---
 
-**Desenvolvido com ❤️ usando Angular 17+ e PrimeNG md-light-indigo**
+**Desenvolvido usando Angular 17+ e PrimeNG md-light-indigo**
