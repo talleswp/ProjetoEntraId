@@ -4,12 +4,38 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:local": "ng serve --configuration local",
+    "start:dev": "ng serve --configuration development",
+    "start:staging": "ng serve --configuration staging",
+    "start:prod": "ng serve --configuration production",
+    
     "build": "ng build",
+    "build:local": "ng build --configuration local",
+    "build:dev": "ng build --configuration development",
+    "build:staging": "ng build --configuration staging",
+    "build:prod": "ng build --configuration production",
+    
     "watch": "ng build --watch --configuration development",
+    "watch:local": "ng build --watch --configuration local",
+    
     "test": "ng test",
-    "serve:prod": "ng serve --configuration production",
+    "test:local": "ng test --configuration local",
+    "test:ci": "ng test --configuration ci",
+    "test:coverage": "ng test --code-coverage",
+    
     "lint": "ng lint",
-    "build:prod": "ng build --configuration production"
+    "lint:fix": "ng lint --fix",
+    
+    "serve:prod": "ng serve --configuration production",
+    
+    "setup:local": "node scripts/setup-local-env.js",
+    "copy:env": "cp src/environments/environment.template.ts src/environments/environment.local.ts",
+    "check:env": "node scripts/check-env.js",
+    
+    "analyze": "ng build --configuration production --stats-json && npx webpack-bundle-analyzer dist/entra-id-angular-app/stats.json",
+    "clean": "rimraf dist .angular/cache node_modules/.cache",
+    "prestart": "npm run check:env",
+    "prebuild": "npm run check:env"
   },
   "dependencies": {
     "@angular/animations": "^17.3.0",
@@ -34,14 +60,24 @@
     "@angular-devkit/build-angular": "^17.3.0",
     "@angular/cli": "^17.3.0",
     "@angular/compiler-cli": "^17.3.0",
+    "@angular-eslint/builder": "^17.0.0",
+    "@angular-eslint/eslint-plugin": "^17.0.0",
+    "@angular-eslint/eslint-plugin-template": "^17.0.0",
+    "@angular-eslint/schematics": "^17.0.0",
+    "@angular-eslint/template-parser": "^17.0.0",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.57.0",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.4.0"
+    "rimraf": "^5.0.0",
+    "typescript": "~5.4.0",
+    "webpack-bundle-analyzer": "^4.10.0"
   }
 }

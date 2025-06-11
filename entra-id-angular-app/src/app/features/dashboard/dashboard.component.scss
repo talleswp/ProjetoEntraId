@@ -1,0 +1,572 @@
+.dashboard-container {
+    background: var(--surface-ground);
+    min-height: calc(100vh - 80px);
+    padding: 2rem;
+}
+
+/* Page Header */
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+
+.header-info {
+    flex: 1;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 0 0 0.5rem 0;
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-color-secondary);
+    margin: 0;
+}
+
+.header-actions {
+    flex-shrink: 0;
+}
+
+/* Welcome Section */
+.welcome-section {
+    margin-bottom: 2rem;
+}
+
+.welcome-card {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-600) 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    color: white;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.welcome-text {
+    flex: 1;
+}
+
+.welcome-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+}
+
+.welcome-description {
+    font-size: 1.1rem;
+    margin: 0;
+    opacity: 0.9;
+}
+
+.welcome-visual {
+    flex-shrink: 0;
+}
+
+.azure-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--surface-border);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.stat-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+}
+
+.user-icon { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+.org-icon { background: linear-gradient(135deg, #10b981, #059669); }
+.users-icon { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.groups-icon { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+
+.stat-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-content {
+    padding: 0.5rem 0;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 0 0 0.5rem 0;
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0 0 0.5rem 0;
+}
+
+.stat-growth {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.growth-icon {
+    color: var(--green-500);
+    font-size: 0.9rem;
+}
+
+.growth-text {
+    color: var(--text-color-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* User Card Specific */
+.user-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.user-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.user-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-color-secondary);
+}
+
+.meta-item i {
+    color: var(--primary-color);
+    font-size: 0.8rem;
+}
+
+/* Organization Card Specific */
+.stat-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.detail-label {
+    font-size: 0.8rem;
+    color: var(--text-color-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-value {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.tenant-id {
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    background: var(--surface-100);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--surface-300);
+}
+
+.loading-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Tables Section */
+.tables-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.full-width-section {
+    width: 100%;
+}
+
+.table-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--surface-border);
+    overflow: hidden;
+}
+
+.table-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--surface-border);
+    background: var(--surface-50);
+}
+
+.table-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.table-title i {
+    color: var(--primary-color);
+    font-size: 1.25rem;
+}
+
+.table-title h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+/* Table Cells */
+.user-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.user-name {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+.user-email, .user-department {
+    font-size: 0.8rem;
+    color: var(--text-color-secondary);
+}
+
+.datetime-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.date {
+    font-weight: 500;
+    color: var(--text-color);
+    font-size: 0.85rem;
+}
+
+.time {
+    font-size: 0.75rem;
+    color: var(--text-color-secondary);
+}
+
+.location-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.ip {
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.location {
+    font-size: 0.75rem;
+    color: var(--text-color-secondary);
+}
+
+.group-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.group-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--primary-50);
+    color: var(--primary-color);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+.group-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.group-name {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+.group-id {
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    color: var(--text-color-secondary);
+}
+
+.empty-message {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.empty-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.empty-content i {
+    font-size: 2rem;
+    color: var(--text-color-secondary);
+}
+
+.empty-content p {
+    margin: 0;
+    color: var(--text-color-secondary);
+    font-size: 0.9rem;
+}
+
+/* Custom PrimeNG Overrides */
+:host ::ng-deep {
+    .refresh-btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-600)) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3) !important;
+    }
+
+    .refresh-btn:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 16px rgba(var(--primary-color-rgb), 0.4) !important;
+    }
+
+    .modern-table {
+    .p-datatable-header {
+        background: var(--surface-50) !important;
+        border-bottom: 1px solid var(--surface-border) !important;
+        font-weight: 600 !important;
+    }
+
+    .p-datatable-thead > tr > th {
+        background: var(--surface-50) !important;
+        border-bottom: 1px solid var(--surface-border) !important;
+        font-weight: 600 !important;
+        color: var(--text-color) !important;
+        padding: 1rem !important;
+    }
+
+    .p-datatable-tbody > tr {
+        transition: background-color 0.2s ease !important;
+    }
+
+    .p-datatable-tbody > tr:hover {
+        background: var(--surface-50) !important;
+    }
+
+    .p-datatable-tbody > tr > td {
+        padding: 1rem !important;
+        border-bottom: 1px solid var(--surface-100) !important;
+    }
+    }
+
+    .p-tag {
+    font-weight: 600 !important;
+    font-size: 0.75rem !important;
+    padding: 0.4rem 0.8rem !important;
+    }
+
+    .p-avatar {
+    font-weight: 600 !important;
+    color: white !important;
+    }
+
+    .p-paginator {
+    background: var(--surface-50) !important;
+    border-top: 1px solid var(--surface-border) !important;
+    padding: 1rem !important;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+    .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 1024px) {
+    .dashboard-container {
+    padding: 1.5rem;
+    }
+
+    .tables-section {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    }
+
+    .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    }
+
+    .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    }
+
+    .welcome-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+    padding: 1rem;
+    }
+
+    .page-title {
+    font-size: 2rem;
+    }
+
+    .welcome-card {
+    padding: 1.5rem;
+    }
+
+    .welcome-title {
+    font-size: 1.5rem;
+    }
+
+    .stat-card {
+    padding: 1rem;
+    }
+
+    .stat-number {
+    font-size: 2rem;
+    }
+
+    .azure-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-container {
+    padding: 0.5rem;
+    }
+
+    .welcome-card {
+    padding: 1rem;
+    }
+
+    .stat-card {
+    padding: 0.75rem;
+    }
+
+    .table-header {
+    padding: 1rem;
+    }
+
+    .user-cell {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    }
+
+    :host ::ng-deep {
+    .modern-table .p-datatable-tbody > tr > td {
+        padding: 0.75rem !important;
+    }
+    }
+}

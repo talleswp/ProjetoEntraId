@@ -1,0 +1,129 @@
+<div class="login-container login-component">
+  <!-- Background com gradiente animado -->
+  <div class="animated-background">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+  </div>
+
+  <!-- Card de Login -->
+  <div class="login-card-container">
+    <div class="login-card">
+      <!-- Header com logo -->
+      <div class="login-header">
+        <div class="logo-container">
+          <img 
+            src="https://www.azurebrasil.cloud/content/images/2025/01/Group-310.svg" 
+            alt="Azure Brasil Logo" 
+            class="logo"
+          />
+          <div class="brand-info">
+            <h1 class="brand-title">EntraId Dashboard</h1>
+            <p class="brand-subtitle">Azure Active Directory Management</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="divider">
+        <span class="divider-text">Autenticação Segura</span>
+      </div>
+
+      <!-- Login Button -->
+      <div class="login-action">
+        <p-button
+          *ngIf="!loading"
+          label="Entrar com Microsoft"
+          icon="pi pi-microsoft"
+          (onClick)="login()"
+          styleClass="login-button w-full"
+          [loading]="loading"
+          size="large"
+          pRipple
+        ></p-button>
+
+        <!-- Loading State -->
+        <div *ngIf="loading" class="loading-state">
+          <p-progressSpinner 
+            styleClass="custom-spinner" 
+            strokeWidth="3"
+            fill="transparent"
+            animationDuration=".8s"
+          ></p-progressSpinner>
+          <div class="loading-text">
+            <h4>Conectando com Microsoft...</h4>
+            <p>Aguarde enquanto redirecionamos você para a autenticação segura</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Info -->
+      <div class="security-info">
+        <div class="security-header">
+          <i class="pi pi-shield"></i>
+          <h3>Segurança Garantida</h3>
+        </div>
+        
+        <div class="security-features">
+          <div class="feature-item">
+            <i class="pi pi-check-circle"></i>
+            <span>Azure Active Directory</span>
+          </div>
+          <div class="feature-item">
+            <i class="pi pi-check-circle"></i>
+            <span>Multi-Factor Authentication</span>
+          </div>
+          <div class="feature-item">
+            <i class="pi pi-check-circle"></i>
+            <span>Tokens Criptografados</span>
+          </div>
+          <div class="feature-item">
+            <i class="pi pi-check-circle"></i>
+            <span>Sessão Segura</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="login-footer">
+        <p class="footer-text">
+          Ao continuar, você concorda com os 
+          <a href="#" class="footer-link">Termos de Uso</a> e 
+          <a href="#" class="footer-link">Política de Privacidade</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Side Info (Desktop only) -->
+    <div class="side-info">
+      <div class="side-content">
+        <h2>Gerencie seu Azure AD</h2>
+        <p>Acesse informações de usuários, grupos e auditoria do seu tenant Azure Active Directory de forma simples e segura.</p>
+        
+        <div class="features-list">
+          <div class="feature">
+            <i class="pi pi-users"></i>
+            <div>
+              <h4>Gerenciamento de Usuários</h4>
+              <p>Visualize e gerencie usuários do seu tenant</p>
+            </div>
+          </div>
+          <div class="feature">
+            <i class="pi pi-sitemap"></i>
+            <div>
+              <h4>Grupos e Permissões</h4>
+              <p>Organize e controle acesso através de grupos</p>
+            </div>
+          </div>
+          <div class="feature">
+            <i class="pi pi-chart-line"></i>
+            <div>
+              <h4>Relatórios e Auditoria</h4>
+              <p>Monitore atividades e tentativas de login</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

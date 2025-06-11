@@ -1,0 +1,72 @@
+<header class="app-header">
+  <div class="header-container">
+    <!-- Left Side: Logo and Brand -->
+    <div class="header-left">
+      <div class="brand-section" (click)="navigateHome()">
+        <img 
+          src="https://www.azurebrasil.cloud/content/images/2025/01/Group-310.svg" 
+          alt="Azure Brasil Logo" 
+          class="brand-logo"
+        />
+        <div class="brand-info">
+          <span class="brand-title">EntraId Dashboard</span>
+          <span class="brand-subtitle">Azure Active Directory</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center: Navigation Menu -->
+    <nav class="header-center">
+      <div class="nav-items">
+        <a 
+          routerLink="/dashboard" 
+          class="nav-item"
+          [class.active]="isActive('/dashboard')"
+        >
+          <i class="pi pi-home"></i>
+          <span>Dashboard</span>
+        </a>
+        <a 
+          routerLink="/profile" 
+          class="nav-item"
+          [class.active]="isActive('/profile')"
+        >
+          <i class="pi pi-user"></i>
+          <span>Perfil</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- Right Side: User Info and Actions -->
+    <div class="header-right">
+      <!-- User Info -->
+      <div class="user-section" *ngIf="currentUser()">
+        <div class="user-info">
+          <span class="user-name">{{ currentUser()?.name || 'Usuário' }}</span>
+          <span class="user-email">{{ currentUser()?.username || 'user@domain.com' }}</span>
+        </div>
+        
+        <p-avatar 
+          [label]="getInitials(currentUser()?.name || '')"
+          size="normal"
+          styleClass="user-avatar"
+          [style]="{ 'background-color': getUserColor(currentUser()?.name || '') }"
+        ></p-avatar>
+      </div>
+
+      <!-- Actions -->
+      <div class="header-actions">
+        <p-button
+          icon="pi pi-sign-out"
+          (onClick)="logout()"
+          severity="secondary"
+          size="small"
+          [outlined]="true"
+          pTooltip="Fazer Logout"
+          tooltipPosition="bottom"
+          styleClass="logout-btn"
+        ></p-button>
+      </div>
+    </div>
+  </div>
+</header>

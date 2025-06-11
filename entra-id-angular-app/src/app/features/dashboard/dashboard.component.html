@@ -1,0 +1,343 @@
+<div class="dashboard-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-info">
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">Visão geral do seu ambiente Azure AD</p>
+      </div>
+      <div class="header-actions">
+        <p-button
+          icon="pi pi-refresh"
+          label="Atualizar"
+          (onClick)="refreshData()"
+          [loading]="loading().general"
+          severity="secondary"
+          size="large"
+          styleClass="refresh-btn"
+        ></p-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Welcome Section -->
+  <div class="welcome-section">
+    <div class="welcome-card">
+      <div class="welcome-content">
+        <div class="welcome-text">
+          <h2 class="welcome-title">
+            Bem-vindo, {{ currentUser()?.name || 'Usuário' }}!
+          </h2>
+          <p class="welcome-description">
+            Gerencie e monitore seu ambiente Azure Active Directory de forma intuitiva
+          </p>
+        </div>
+        <div class="welcome-visual">
+          <div class="azure-icon">
+            <i class="pi pi-cloud"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <!-- Current User Card -->
+    <div class="stat-card user-card">
+      <div class="stat-header">
+        <div class="stat-icon user-icon">
+          <i class="pi pi-user"></i>
+        </div>
+        <span class="stat-label">Usuário Atual</span>
+      </div>
+      
+      <div class="stat-content">
+        <div class="user-details" *ngIf="currentUserInfo(); else loadingUser">
+          <h3 class="user-name">{{ currentUser()?.name || 'Carregando...' }}</h3>
+          <div class="user-meta">
+            <div class="meta-item">
+              <i class="pi pi-envelope"></i>
+              <span>{{ currentUserInfo()?.email || 'N/A' }}</span>
+            </div>
+            <div class="meta-item" *ngIf="currentUserInfo()?.jobTitle">
+              <i class="pi pi-briefcase"></i>
+              <span>{{ currentUserInfo()?.jobTitle }}</span>
+            </div>
+            <div class="meta-item" *ngIf="currentUserInfo()?.department">
+              <i class="pi pi-building"></i>
+              <span>{{ currentUserInfo()?.department }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <ng-template #loadingUser>
+          <div class="loading-content">
+            <p-skeleton width="80%" height="1.5rem" styleClass="mb-2"></p-skeleton>
+            <p-skeleton width="60%" height="1rem" styleClass="mb-1"></p-skeleton>
+            <p-skeleton width="70%" height="1rem"></p-skeleton>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- Organization Card -->
+    <div class="stat-card org-card">
+      <div class="stat-header">
+        <div class="stat-icon org-icon">
+          <i class="pi pi-building"></i>
+        </div>
+        <span class="stat-label">Organização</span>
+      </div>
+      
+      <div class="stat-content">
+        <h3 class="stat-value">{{ tenantInfo()?.displayName || 'Carregando...' }}</h3>
+        <div class="stat-details" *ngIf="tenantInfo()">
+          <div class="detail-item">
+            <span class="detail-label">Domínios:</span>
+            <span class="detail-value">{{ tenantInfo()?.verifiedDomains?.join(', ') || 'N/A' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Tenant ID:</span>
+            <span class="detail-value tenant-id">{{ getTenantIdShort() }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Users Count Card -->
+    <div class="stat-card users-card">
+      <div class="stat-header">
+        <div class="stat-icon users-icon">
+          <i class="pi pi-users"></i>
+        </div>
+        <span class="stat-label">Usuários</span>
+      </div>
+      
+      <div class="stat-content">
+        <h3 class="stat-number">{{ tenantInfo()?.totalUsers || 0 }}</h3>
+        <div class="stat-growth">
+          <i class="pi pi-arrow-up growth-icon"></i>
+          <span class="growth-text">{{ tenantUsers().length }} ativos</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Groups Count Card -->
+    <div class="stat-card groups-card">
+      <div class="stat-header">
+        <div class="stat-icon groups-icon">
+          <i class="pi pi-sitemap"></i>
+        </div>
+        <span class="stat-label">Grupos</span>
+      </div>
+      
+      <div class="stat-content">
+        <h3 class="stat-number">{{ tenantInfo()?.totalGroups || 0 }}</h3>
+        <div class="stat-growth">
+          <i class="pi pi-arrow-up growth-icon"></i>
+          <span class="growth-text">{{ tenantGroups().length }} visíveis</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Tables Section -->
+  <div class="tables-section">
+    <!-- Recent Login Attempts -->
+    <div class="table-card">
+      <div class="table-header">
+        <div class="table-title">
+          <i class="pi pi-shield"></i>
+          <h3>Tentativas de Login Recentes</h3>
+        </div>
+      </div>
+      
+      <p-table 
+        [value]="recentLogins()" 
+        [loading]="loading().logins"
+        styleClass="modern-table"
+        [scrollable]="true"
+        scrollHeight="350px"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} tentativas"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 35%">Usuário</th>
+            <th style="width: 15%">Status</th>
+            <th style="width: 25%">Data/Hora</th>
+            <th style="width: 25%">Localização</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-login>
+          <tr>
+            <td>
+              <div class="user-cell">
+                <p-avatar 
+                  [label]="getInitials(login.userDisplayName)" 
+                  size="normal"
+                  [style]="{ 'background-color': getUserColor(login.userDisplayName) }"
+                ></p-avatar>
+                <div class="user-details">
+                  <div class="user-name">{{ login.userDisplayName }}</div>
+                  <div class="user-email">{{ login.userPrincipalName }}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <p-tag 
+                [value]="getStatusLabel(login.status)" 
+                [severity]="getStatusSeverity(login.status)"
+                [rounded]="true"
+              ></p-tag>
+            </td>
+            <td>
+              <div class="datetime-cell">
+                <div class="date">{{ formatDate(login.createdDateTime) }}</div>
+                <div class="time">{{ formatTime(login.createdDateTime) }}</div>
+              </div>
+            </td>
+            <td>
+              <div class="location-cell">
+                <div class="ip">{{ login.ipAddress }}</div>
+                <div class="location">{{ login.location }}</div>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="4" class="empty-message">
+              <div class="empty-content">
+                <i class="pi pi-info-circle"></i>
+                <p>Nenhuma tentativa de login encontrada</p>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!-- Tenant Users -->
+    <div class="table-card">
+      <div class="table-header">
+        <div class="table-title">
+          <i class="pi pi-users"></i>
+          <h3>Usuários do Tenant</h3>
+        </div>
+      </div>
+      
+      <p-table 
+        [value]="tenantUsers()" 
+        [loading]="loading().users"
+        styleClass="modern-table"
+        [scrollable]="true"
+        scrollHeight="250px"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 40%">Nome</th>
+            <th style="width: 35%">Email</th>
+            <th style="width: 25%">Cargo</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user>
+          <tr>
+            <td>
+              <div class="user-cell">
+                <p-avatar 
+                  [label]="getInitials(user.displayName)" 
+                  size="normal"
+                  [style]="{ 'background-color': getUserColor(user.displayName) }"
+                ></p-avatar>
+                <div class="user-details">
+                  <div class="user-name">{{ user.displayName }}</div>
+                  <div class="user-department">{{ user.department || 'Sem departamento' }}</div>
+                </div>
+              </div>
+            </td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.jobTitle || 'N/A' }}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="3" class="empty-message">
+              <div class="empty-content">
+                <i class="pi pi-info-circle"></i>
+                <p>Nenhum usuário encontrado</p>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+
+  <!-- Groups Table (Full Width) -->
+  <div class="full-width-section">
+    <div class="table-card">
+      <div class="table-header">
+        <div class="table-title">
+          <i class="pi pi-sitemap"></i>
+          <h3>Grupos do Tenant</h3>
+        </div>
+      </div>
+      
+      <p-table 
+        [value]="tenantGroups()" 
+        [loading]="loading().groups"
+        styleClass="modern-table"
+        [paginator]="true"
+        [rows]="8"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} grupos"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 30%">Nome do Grupo</th>
+            <th style="width: 40%">Descrição</th>
+            <th style="width: 15%">Membros</th>
+            <th style="width: 15%">Criado em</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-group>
+          <tr>
+            <td>
+              <div class="group-cell">
+                <div class="group-icon">
+                  <i class="pi pi-users"></i>
+                </div>
+                <div class="group-details">
+                  <div class="group-name">{{ group.displayName }}</div>
+                  <div class="group-id">{{ group.id.substring(0, 8) }}...</div>
+                </div>
+              </div>
+            </td>
+            <td>{{ group.description || 'Sem descrição' }}</td>
+            <td>
+              <p-tag 
+                [value]="group.memberCount.toString()" 
+                severity="info"
+                icon="pi pi-users"
+                [rounded]="true"
+              ></p-tag>
+            </td>
+            <td>{{ formatDate(group.createdDateTime) }}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="4" class="empty-message">
+              <div class="empty-content">
+                <i class="pi pi-info-circle"></i>
+                <p>Nenhum grupo encontrado</p>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

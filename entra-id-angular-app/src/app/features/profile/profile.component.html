@@ -1,0 +1,159 @@
+<div class="profile-container p-4">
+  <div class="flex align-items-center mb-4">
+    <h1 class="text-3xl font-bold text-900 m-0">Meu Perfil</h1>
+  </div>
+
+  <div class="grid">
+    <!-- Profile Card -->
+    <div class="col-12 lg:col-8">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="profile-header">
+            <div class="flex flex-column lg:flex-row align-items-center gap-4 p-4">
+              <p-avatar 
+                [label]="getInitials(msalUser()?.name || '')"
+                size="xlarge"
+                styleClass="profile-avatar"
+              ></p-avatar>
+              <div class="text-center lg:text-left">
+                <h2 class="text-2xl font-bold text-900 mb-1">
+                  {{ userInfo()?.displayName || msalUser()?.name || 'Carregando...' }}
+                </h2>
+                <p class="text-600 text-lg mb-2">
+                  {{ userInfo()?.email || msalUser()?.username || 'Carregando...' }}
+                </p>
+                <p-tag 
+                  value="Usuário Ativo" 
+                  severity="success" 
+                  icon="pi pi-check-circle"
+                ></p-tag>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+
+        <div class="profile-content">
+          <h3 class="text-xl font-semibold text-900 mb-3">Informações Pessoais</h3>
+          
+          <div class="grid" *ngIf="!loading(); else loadingSkeleton">
+            <div class="col-12 md:col-6">
+              <div class="field-group mb-4">
+                <label class="field-label">Nome Completo</label>
+                <div class="field-value">{{ userInfo()?.displayName || 'N/A' }}</div>
+              </div>
+            </div>
+            
+            <div class="col-12 md:col-6">
+              <div class="field-group mb-4">
+                <label class="field-label">Email</label>
+                <div class="field-value">{{ userInfo()?.email || 'N/A' }}</div>
+              </div>
+            </div>
+            
+            <div class="col-12 md:col-6">
+              <div class="field-group mb-4">
+                <label class="field-label">Cargo</label>
+                <div class="field-value">{{ userInfo()?.jobTitle || 'N/A' }}</div>
+              </div>
+            </div>
+            
+            <div class="col-12 md:col-6">
+              <div class="field-group mb-4">
+                <label class="field-label">Departamento</label>
+                <div class="field-value">{{ userInfo()?.department || 'N/A' }}</div>
+              </div>
+            </div>
+            
+            <div class="col-12">
+              <p-divider></p-divider>
+            </div>
+            
+            <div class="col-12 md:col-6">
+              <div class="field-group mb-4">
+                <label class="field-label">ID do Usuário</label>
+                <div class="field-value font-mono">{{ userInfo()?.id || 'N/A' }}</div>
+              </div>
+            </div>
+            
+            <div class="col-12 md:col-6">
+              <div class="field-group mb-4">
+                <label class="field-label">Tenant ID</label>
+                <div class="field-value font-mono">{{ userInfo()?.tenantId || msalUser()?.tenantId || 'N/A' }}</div>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #loadingSkeleton>
+            <div class="grid">
+              <div class="col-12 md:col-6" *ngFor="let item of [1,2,3,4,5,6]">
+                <div class="field-group mb-4">
+                  <p-skeleton width="100px" height="1rem" styleClass="mb-2"></p-skeleton>
+                  <p-skeleton width="200px" height="1.2rem"></p-skeleton>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- Actions Card -->
+    <div class="col-12 lg:col-4">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="p-4 pb-0">
+            <h3 class="text-xl font-semibold text-900 m-0">Ações</h3>
+          </div>
+        </ng-template>
+
+        <div class="flex flex-column gap-3">
+          <p-button
+            label="Atualizar Informações"
+            icon="pi pi-refresh"
+            (onClick)="refreshProfile()"
+            [loading]="loading()"
+            styleClass="w-full"
+            severity="primary"
+          ></p-button>
+          
+          <p-divider></p-divider>
+          
+          <p-button
+            label="Fazer Logout"
+            icon="pi pi-sign-out"
+            (onClick)="logout()"
+            styleClass="w-full"
+            severity="danger"
+            [outlined]="true"
+          ></p-button>
+        </div>
+      </p-card>
+
+      <!-- Quick Info Card -->
+      <p-card styleClass="mt-3">
+        <ng-template pTemplate="header">
+          <div class="p-4 pb-0">
+            <h3 class="text-xl font-semibold text-900 m-0">Informações Rápidas</h3>
+          </div>
+        </ng-template>
+
+        <div class="flex flex-column gap-3">
+          <div class="flex align-items-center justify-content-between">
+            <span class="text-600">Status da Conta</span>
+            <p-tag value="Ativa" severity="success" icon="pi pi-check"></p-tag>
+          </div>
+          
+          <div class="flex align-items-center justify-content-between">
+            <span class="text-600">MFA Habilitado</span>
+            <p-tag value="Sim" severity="info" icon="pi pi-shield"></p-tag>
+          </div>
+          
+          <div class="flex align-items-center justify-content-between">
+            <span class="text-600">Tipo de Conta</span>
+            <p-tag value="Corporativa" severity="warning" icon="pi pi-building"></p-tag>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div>

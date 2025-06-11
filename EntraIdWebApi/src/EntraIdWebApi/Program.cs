@@ -39,7 +39,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = $"{azureAdConfig.Instance}{azureAdConfig.TenantId}/v2.0",
+            //ValidIssuer = $"{azureAdConfig.Instance}{azureAdConfig.TenantId}/v2.0",
+            ValidIssuers = new[] {
+                $"https://login.microsoftonline.com/{azureAdConfig.TenantId}/v2.0",
+                $"https://sts.windows.net/{azureAdConfig.TenantId}/"
+            },
             ValidateAudience = true,
             ValidAudience = azureAdConfig.Audience,
             ValidateLifetime = true,
@@ -119,7 +123,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", policy =>
     {
-        policy.WithOrigins("http://localhost:4200", "https://localhost:4200")
+        policy.WithOrigins("http://localhost:4200", "https://localhost:4200", "http://localhost:4201", "https://localhost:4201")
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials();
