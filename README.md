@@ -2,6 +2,10 @@
 
 Uma solução completa para gerenciamento e monitoramento do Azure Active Directory (Entra ID), composta por uma API .NET 8 e um dashboard Angular 17+ moderno.
 
+![](assets/1-login.jpg)
+![](assets/2-dashboard.jpg)
+![](assets/3-dashboard.jpg)
+
 ## 📋 Visão Geral
 
 Este projeto oferece uma interface intuitiva para:
