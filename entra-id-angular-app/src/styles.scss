@@ -1,297 +1,78 @@
-// PrimeNG Material Theme
-@import "primeng/resources/themes/md-light-indigo/theme.css";
+@import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
 @import "primeicons/primeicons.css";
 @import "primeflex/primeflex.css";
 
-// Global Styles
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  font-size: 14px;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  font-size: 1rem;
-  color: var(--text-color);
-  background: var(--surface-ground);
-  line-height: 1.6;
-}
-
-// Material Design Color Overrides
+// Customizações adicionais
 :root {
-  --primary-color: #1976d2;
-  --primary-50: #e3f2fd;
-  --primary-100: #bbdefb;
-  --primary-200: #90caf9;
-  --primary-300: #64b5f6;
-  --primary-400: #42a5f5;
-  --primary-500: #2196f3;
-  --primary-600: #1976d2;
-  --primary-700: #1565c0;
-  --primary-800: #0d47a1;
-  --primary-900: #0a3d62;
+  // Cores personalizadas para o tema
+  --primary-50: #eff6ff;
+  --primary-100: #dbeafe;
+  --primary-200: #bfdbfe;
+  --primary-300: #93c5fd;
+  --primary-400: #60a5fa;
+  --primary-500: #3b82f6;
+  --primary-600: #2563eb;
+  --primary-700: #1d4ed8;
+  --primary-800: #1e40af;
+  --primary-900: #1e3a8a;
 
-  --surface-ground: #fafafa;
-  --surface-section: #ffffff;
-  --surface-card: #ffffff;
-  --surface-overlay: #ffffff;
-  --surface-border: #e0e0e0;
-  --surface-hover: #f5f5f5;
-
-  --text-color: #212121;
-  --text-color-secondary: #757575;
-
-  // Custom gradients
-  --gradient-primary: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-700) 100%);
-  --gradient-surface: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  // Gradientes
+  --gradient-primary: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+  --gradient-secondary: linear-gradient(135deg, #667eea, #764ba2);
+  
+  // Sombras
+  --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.05);
+  --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.15);
+  --shadow-heavy: 0 25px 50px rgba(0, 0, 0, 0.25);
 }
 
-// Dark mode support
-@media (prefers-color-scheme: dark) {
-  :root {
-    --surface-ground: #121212;
-    --surface-section: #1e1e1e;
-    --surface-card: #1e1e1e;
-    --surface-overlay: #1e1e1e;
-    --surface-border: #2d2d2d;
-    --surface-hover: #2d2d2d;
-
-    --text-color: #ffffff;
-    --text-color-secondary: #b3b3b3;
-  }
-}
-
-// Utility Classes
-.text-primary { 
-  color: var(--primary-color) !important; 
-}
-
-.bg-primary { 
-  background: var(--primary-color) !important; 
-}
-
-.gradient-primary {
-  background: var(--gradient-primary) !important;
-}
-
-.gradient-surface {
-  background: var(--gradient-surface) !important;
-}
-
-.font-mono {
-  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Consolas', 'Courier New', monospace !important;
-}
-
-// Animation utilities
-.fade-in {
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-.slide-up {
-  animation: slideUp 0.3s ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideUp {
-  from { 
+// Animações globais
+@keyframes fadeInUp {
+  from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
-  to { 
+  to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-// Responsive helpers
-@media (max-width: 768px) {
-  .mobile-hidden { 
-    display: none !important; 
-  }
-  
-  .mobile-full-width { 
-    width: 100% !important; 
-  }
-
-  .mobile-text-center {
-    text-align: center !important;
-  }
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
 }
 
-@media (max-width: 576px) {
-  html {
-    font-size: 13px;
-  }
-}
-
-// Custom scrollbar
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--surface-100);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--surface-400);
-  border-radius: 4px;
-  
-  &:hover {
-    background: var(--surface-500);
-  }
-}
-
-// Loading states
-.loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 3rem;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.loading-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-// Card improvements
-.card-hover {
-  transition: all 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  }
-}
-
-// Focus styles
-.focus-ring {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
-}
-
-// Print styles
-@media print {
-  body {
-    background: white;
-    color: black;
-  }
-  
-  .no-print {
-    display: none !important;
-  }
-}
-
-// PrimeNG Customizations
-.p-component {
-  font-size: 1rem;
-}
-
+// Melhorias nos componentes PrimeNG
 .p-button {
   font-weight: 600;
-  transition: all 0.2s ease;
-  
-  &:not(.p-button-outlined):not(.p-button-text) {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    
-    &:hover {
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-      transform: translateY(-1px);
-    }
-  }
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.p-button:not(.p-button-outlined):not(.p-button-text) {
+  box-shadow: var(--shadow-light);
+}
+
+.p-button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-medium);
 }
 
 .p-card {
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid var(--surface-border);
-  overflow: hidden;
-  
-  .p-card-header {
-    border-bottom: 1px solid var(--surface-border);
-  }
+  box-shadow: var(--shadow-medium);
+  border: none;
 }
 
-.p-datatable {
-  border-radius: 12px;
-  overflow: hidden;
-  
-  .p-datatable-header {
-    background: var(--surface-50);
-    border-bottom: 1px solid var(--surface-border);
-    font-weight: 600;
-  }
-  
-  .p-datatable-tbody > tr {
-    transition: background-color 0.2s ease;
-    
-    &:hover {
-      background: var(--surface-50);
-    }
-  }
+.p-progressspinner {
+  width: 3rem;
+  height: 3rem;
 }
 
-.p-tag {
-  font-weight: 600;
-  font-size: 0.875rem;
-  border-radius: 6px;
-}
-
-.p-avatar {
-  font-weight: 600;
-}
-
-.p-menubar {
-  border-radius: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.p-toast {
-  .p-toast-message {
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-}
-
-// Accessibility improvements
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-// High contrast mode
-@media (prefers-contrast: high) {
-  :root {
-    --surface-border: #000000;
-    --text-color: #000000;
-    --text-color-secondary: #333333;
+// Responsividade
+@media (max-width: 768px) {
+  .p-button {
+    padding: 0.75rem 1.5rem;
   }
 }

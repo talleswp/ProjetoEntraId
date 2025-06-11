@@ -5,7 +5,7 @@ Dashboard moderno em Angular 17+ com PrimeNG 17+ e autenticação MSAL para Azur
 ## 🚀 Tecnologias
 
 - **Angular 17+** - Framework principal com standalone components
-- **PrimeNG 17+** - Biblioteca de componentes UI com tema md-light-indigo
+- **PrimeNG 17+** - Biblioteca de componentes UI com tema lara-light-blue
 - **MSAL Angular** - Autenticação Microsoft Azure AD
 - **TypeScript 5.4+** - Linguagem de programação
 - **SCSS** - Pré-processador CSS
@@ -15,7 +15,7 @@ Dashboard moderno em Angular 17+ com PrimeNG 17+ e autenticação MSAL para Azur
 ## 🎨 Características
 
 ### Design
-- ✅ **Tema md-light-indigo** do PrimeNG
+- ✅ **Tema lara-light-blue** do PrimeNG
 - ✅ **Logo personalizado** Azure Brasil
 - ✅ **Design responsivo** mobile-first
 - ✅ **Dark mode** automático
@@ -366,4 +366,4 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 
 ---
 
-**Desenvolvido usando Angular 17+ e PrimeNG md-light-indigo**
+**Desenvolvido usando Angular 17+ e PrimeNG lara-light-blue**
