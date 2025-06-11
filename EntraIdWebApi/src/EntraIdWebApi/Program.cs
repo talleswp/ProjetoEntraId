@@ -1,9 +1,11 @@
 using EntraIdWebApi.Configuration;
 using EntraIdWebApi.Extensions;
 using EntraIdWebApi.Middleware;
-using Microsoft.Identity.Web;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,11 +22,56 @@ builder.Host.UseSerilog();
 builder.Services.Configure<AzureAdConfiguration>(
     builder.Configuration.GetSection("AzureAd"));
 
-// Autenticação com Microsoft Identity Web
-builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration, "AzureAd")
-                .EnableTokenAcquisitionToCallDownstreamApi()
-                .AddMicrosoftGraph(builder.Configuration.GetSection("AzureAd"))
-                .AddInMemoryTokenCaches();
+var azureAdConfig = builder.Configuration.GetSection("AzureAd").Get<AzureAdConfiguration>();
+if (azureAdConfig == null)
+{
+    throw new InvalidOperationException("Configuração AzureAd não encontrada");
+}
+
+// ✅ CONFIGURAÇÃO JWT BEARER MANUAL
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = $"{azureAdConfig.Instance}{azureAdConfig.TenantId}/v2.0";
+
+        options.Audience = azureAdConfig.Audience; 
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = $"{azureAdConfig.Instance}{azureAdConfig.TenantId}/v2.0",
+            ValidateAudience = true,
+            ValidAudience = azureAdConfig.Audience,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.FromMinutes(5)
+        };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnTokenValidated = context =>
+            {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                var claims = context.Principal?.Claims.Select(c => $"{c.Type}={c.Value}");
+                logger.LogInformation("✅ Token validado. Claims: {Claims}", string.Join(", ", claims ?? Array.Empty<string>()));
+                return Task.CompletedTask;
+            },
+            OnAuthenticationFailed = context =>
+            {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                logger.LogError("❌ Falha na autenticação: {Error}", context.Exception.Message);
+                return Task.CompletedTask;
+            },
+            OnChallenge = context =>
+            {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                logger.LogWarning("⚠️ Desafio de autenticação: {Error}", context.Error);
+                return Task.CompletedTask;
+            }
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 // Registrar serviços customizados
 builder.Services.AddCustomServices(builder.Configuration);
@@ -32,25 +79,19 @@ builder.Services.AddCustomServices(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Configuração avançada do Swagger
+// Swagger
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo 
-    { 
-        Title = "EntraId Web API", 
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "EntraId Web API",
         Version = "v1",
-        Description = "API .NET 8 com autenticação Azure Entra ID para obter informações de usuários e tenants",
-        Contact = new OpenApiContact
-        {
-            Name = "Support",
-            Email = "support@example.com"
-        }
+        Description = "API .NET 8 com Microsoft Graph 5.x + Azure.Identity"
     });
 
-    // Configuração para autenticação JWT Bearer
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header usando o esquema Bearer. Exemplo: \"Authorization: Bearer {token}\"",
+        Description = "JWT Authorization header usando Bearer scheme",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
@@ -71,61 +112,74 @@ builder.Services.AddSwaggerGen(c =>
             new string[] {}
         }
     });
-
-    // Incluir comentários XML se disponível
-    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    if (File.Exists(xmlPath))
-    {
-        c.IncludeXmlComments(xmlPath);
-    }
 });
 
-// Configuração CORS
+// CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("AllowAngularApp", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins("http://localhost:4200", "https://localhost:4200")
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline
+// Pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "EntraId Web API v1");
-        c.RoutePrefix = "swagger";
-        c.DocumentTitle = "EntraId Web API - Swagger UI";
-        c.DefaultModelsExpandDepth(-1); // Disable swagger schemas at bottom
-    });
+    app.UseSwaggerUI();
 }
 
-app.UseMiddleware<ErrorHandlingMiddleware>();
+// Debug middleware
+app.Use(async (context, next) =>
+{
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+    logger.LogInformation("📥 {Method} {Path}", context.Request.Method, context.Request.Path);
 
+    if (context.Request.Headers.ContainsKey("Authorization"))
+    {
+        var authHeader = context.Request.Headers["Authorization"].ToString();
+        logger.LogInformation("🔐 Auth header: {Header}", authHeader.Substring(0, Math.Min(50, authHeader.Length)) + "...");
+    }
+
+    await next();
+});
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
-app.UseCors("AllowAll");
+app.UseCors("AllowAngularApp");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
+// Endpoint de debug
+app.MapGet("/debug/auth", (HttpContext context) =>
+{
+    var claims = context.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+    return Results.Ok(new
+    {
+        IsAuthenticated = context.User.Identity?.IsAuthenticated ?? false,
+        ClaimsCount = claims.Count,
+        Claims = claims.Take(10)
+    });
+}).RequireAuthorization();
+
 try
 {
-    Log.Information("Iniciando aplicação EntraId Web API");
-    Log.Information("Swagger disponível em: https://localhost:{{Port}}/swagger");
+    Log.Information("🚀 Iniciando EntraId Web API");
+    Log.Information("🌐 Swagger: https://localhost:{{Port}}/swagger");
     app.Run();
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Aplicação falhou ao iniciar");
+    Log.Fatal(ex, "❌ Falha ao iniciar aplicação");
 }
 finally
 {
