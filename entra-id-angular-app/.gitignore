@@ -1,8 +1,8 @@
-# Environment files com dados sensíveis
-src/environments/environment.local.ts
-src/environments/environment.dev.ts
-src/environments/.env.local
-src/environments/.env.dev
+# Environment files that might contain sensitive information
+src/environments/*.ts
+!src/environments/environment.ts
+!src/environments/environment.template.ts
+!src/environments/environment.prod.ts
 
 # Arquivos de configuração local
 .env
